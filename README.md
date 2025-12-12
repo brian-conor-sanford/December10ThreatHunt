@@ -33,27 +33,28 @@ Systems: azuki-fileserver01
 
 📂 WHAT (Event Summary)
 
-Initial access via RemoteInteractive logon from 159.26.106.98 using compromised credentials.
-Attacker returned 72 hours later from 10.1.0.108 to azuki-fileserver01.
-Lateral movement using:
-mstsc.exe /v:10.1.0.108
-Share enumeration via net1 share.
-Remote share enumeration using UNC paths.
-Privilege enumeration: whoami.exe /all.
-Network configuration enumeration: ipconfig.exe /all.
-Directory hiding: attrib.exe +h +s C:\Windows\Logs\CBS.
-Staging directory created: C:\Windows\Logs\CBS.
-Script downloaded using certutil.exe.
-Credential file created: IT-Admin-Passwords.csv.
-Recursive copy via xcopy.exe.
-Credential compression via tar.exe.
-Renamed credential dumping tool: pd.exe.
-LSASS dump created: pd.exe -accepteula -ma.
-Exfiltration via curl.exe -F.
-Cloud storage used: file.io.
-Persistence established: autorun key FileShareSync.
-Malicious beacon: svchost.ps1.
-PowerShell history deleted: ConsoleHost_history.txt.
+Initial access via RemoteInteractive logon from 159.26.106.98 using compromised credentials.  
+Attacker returned 72 hours later from 10.1.0.108 to azuki-fileserver01.  
+Lateral movement using:  
+mstsc.exe /v:10.1.0.108  
+Share enumeration via net1 share.  
+Remote share enumeration using UNC paths.  
+Privilege enumeration: whoami.exe /all.  
+Network configuration enumeration: ipconfig.exe /all.  
+Directory hiding: attrib.exe +h +s C:\Windows\Logs\CBS.  
+Staging directory created: C:\Windows\Logs\CBS.  
+Script downloaded using certutil.exe.  
+Credential file created: IT-Admin-Passwords.csv.  
+Recursive copy via xcopy.exe.  
+Credential compression via tar.exe.  
+Renamed credential dumping tool: pd.exe.  
+LSASS dump created: pd.exe -accepteula -ma.  
+Exfiltration via curl.exe -F.  
+Cloud storage used: file.io.  
+Persistence established: autorun key FileShareSync.  
+Malicious beacon: svchost.ps1.  
+PowerShell history deleted: ConsoleHost_history.txt.  
+
 
 ⏱ WHEN (UTC Timeline)
 11/19 – Initial access.
