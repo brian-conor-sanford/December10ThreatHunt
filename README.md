@@ -57,78 +57,78 @@ Malicious beacon: svchost.ps1.
 PowerShell history deleted: ConsoleHost_history.txt.  
 
 
-⏱ WHEN (UTC Timeline)
-11/19 – Initial access.
-11/22 – Attacker returns (72 hours later), conducts lateral movement.
-11/22 – Discovery, privilege escalation, staging, credential dumping, exfiltration.
+⏱ WHEN (UTC Timeline)  
+11/19 – Initial access.  
+11/22 – Attacker returns (72 hours later), conducts lateral movement.  
+11/22 – Discovery, privilege escalation, staging, credential dumping, exfiltration.  
 
-🖥 WHERE (Infrastructure Impact)
-Compromised Host 
-azuki-fileserver01 
-Attacker Infrastructure 
-External IPs: 159.26.106.98, 78.141.196.6 
-Internal movement IP: 10.1.0.108 
-Malware / Staging Locations 
-C:\Windows\Logs\CBS 
-C:\Windows\System32\svchost.ps1 
-C:\Windows\Logs\CBS\credentials.tar.gz 
-C:\Windows\Logs\CBS\lsass.dmp 
+🖥 WHERE (Infrastructure Impact)  
+Compromised Host  
+azuki-fileserver01  
+Attacker Infrastructure  
+External IPs: 159.26.106.98, 78.141.196.6  
+Internal movement IP: 10.1.0.108  
+Malware / Staging Locations  
+C:\Windows\Logs\CBS  
+C:\Windows\System32\svchost.ps1  
+C:\Windows\Logs\CBS\credentials.tar.gz  
+C:\Windows\Logs\CBS\lsass.dmp  
 
-❓ WHY
-Root Cause
-Compromised credentials enabling unauthorized remote access. 
-Attacker Objective 
-Access privileged credentials 
-Exfiltrate sensitive administrative data 
 
-⚙️ HOW (Full Attack Chain)
+❓ WHY  
+Root Cause  
+Compromised credentials enabling unauthorized remote access.  
+Attacker Objective  
+Access privileged credentials  
+Exfiltrate sensitive administrative data  
 
-Remote login using compromised credentials (kenji.sato). 
-Attacker returns from internal IP 10.1.0.108. 
-Lateral movement via mstsc.exe. 
-Share enumeration (net1 share). 
-UNC path discovery. 
-Privilege enumeration (whoami /all). 
-Network enumeration (ipconfig /all). 
-Hidden directory created using attrib.exe. 
-Malicious script downloaded using certutil.exe. 
-Folder copied using xcopy.exe. 
-Credential CSV generated. 
-Credentials compressed with tar.exe. 
-LSASS dumped using pd.exe. 
-Data exfiltrated via curl.exe → file.io. 
-Persistence added via registry autorun. 
-Malicious PowerShell file executed (svchost.ps1). 
-PowerShell history deleted. 
+⚙️ HOW (Full Attack Chain)  
+Remote login using compromised credentials (kenji.sato).  
+Attacker returns from internal IP 10.1.0.108.  
+Lateral movement via mstsc.exe.  
+Share enumeration (net1 share).  
+UNC path discovery.  
+Privilege enumeration (whoami /all).  
+Network enumeration (ipconfig /all).  
+Hidden directory created using attrib.exe.  
+Malicious script downloaded using certutil.exe.  
+Folder copied using xcopy.exe.  
+Credential CSV generated.  
+Credentials compressed with tar.exe.  
+LSASS dumped using pd.exe.  
+Data exfiltrated via curl.exe → file.io.  
+Persistence added via registry autorun.  
+Malicious PowerShell file executed (svchost.ps1).  
+PowerShell history deleted.  
 
-🚨 IMPACT ASSESSMENT
-Actual Impact 
-Credential compromise 
-Privileged account takeover 
-Exfiltration of sensitive IT admin data 
-LSASS dump theft 
-Persistence established 
-Risk Level: CRITICAL 
+🚨 IMPACT ASSESSMENT  
+Actual Impact  
+Credential compromise  
+Privileged account takeover  
+Exfiltration of sensitive IT admin data  
+LSASS dump theft  
+Persistence established  
+Risk Level: CRITICAL  
 
-🛠 RECOMMENDATIONS
+🛠 RECOMMENDATIONS  
 
-🔥 IMMEDIATE
-Disable kenji.sato and fileadmin accounts
-Disconnect azuki-fileserver01 from the network
-Block 78.141.196.6
-Reset all privileged credentials
+🔥 IMMEDIATE  
+Disable kenji.sato and fileadmin accounts  
+Disconnect azuki-fileserver01 from the network  
+Block 78.141.196.6  
+Reset all privileged credentials  
 
-⏳ SHORT-TERM (1–7 Days)
-Enterprise-wide credential reset
-Rebuild azuki-fileserver01
-Audit registry autoruns domain-wide
-Deploy improved RDP monitoring
+⏳ SHORT-TERM (1–7 Days)  
+Enterprise-wide credential reset  
+Rebuild azuki-fileserver01  
+Audit registry autoruns domain-wide  
+Deploy improved RDP monitoring  
 
-🛡 LONG-TERM
-Enforce MFA for all privileged accounts
-Implement network segmentation for file servers
-Deploy EDR with LSASS protection
-Monitor for suspicious tool usage: certutil, tar, xcopy, curl
+🛡 LONG-TERM  
+Enforce MFA for all privileged accounts  
+Implement network segmentation for file servers  
+Deploy EDR with LSASS protection  
+Monitor for suspicious tool usage: certutil, tar, xcopy, curl  
 
 📎 APPENDIX A — INDICATORS OF COMPROMISE (IOCs)
 Attacker IPs 
