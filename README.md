@@ -13,23 +13,23 @@ Analyst: Brian Sanford
 
 📌 SUMMARY OF FINDINGS
 
-Attacker returned approximately 72 hours after initial access on 11/19.
-Successful RemoteInteractive login using compromised account kenji.sato.
-Lateral movement via mstsc.exe to azuki-fileserver01.
-Evidence of discovery, privilege enumeration, staging, credential dumping, and exfiltration.
-Use of persistence mechanisms, log deletion, and anti-forensics techniques.
-
+Attacker returned approximately 72 hours after initial access on 11/19. 
+Successful RemoteInteractive login using compromised account kenji.sato. 
+Lateral movement via mstsc.exe to azuki-fileserver01. 
+Evidence of discovery, privilege enumeration, staging, credential dumping, and exfiltration. 
+Use of persistence mechanisms, log deletion, and anti-forensics techniques. 
+ 
 🔍 WHO, WHAT, WHEN, WHERE, WHY, HOW
 
 👤 WHO
 
-Attacker Source IPs
-Initial Access IP: 159.26.106.98
-Later Movement: 10.1.0.108
-External C2: 78.141.196.6
-Compromised
-Accounts: fileadmin
-Systems: azuki-fileserver01
+Attacker Source IPs 
+Initial Access IP: 159.26.106.98 
+Later Movement: 10.1.0.108  
+External C2: 78.141.196.6 
+Compromised  
+Accounts: fileadmin 
+Systems: azuki-fileserver01 
 
 📂 WHAT (Event Summary)
 
