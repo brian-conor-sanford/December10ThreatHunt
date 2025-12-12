@@ -200,146 +200,61 @@ T1567
 
 📚 APPENDIX D — KQL QUERIES
 
-Query 1 – Starting Point  
-DeviceLogonEvents  
-| where Timestamp >= datetime(2025-11-19)  
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where DeviceName contains "azuki"
- 
-Query 2 – RemoteInteractive Login   
-DeviceLogonEvents  
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where AccountName contains "kenji.sato"  
-| where LogonType == "RemoteInteractive" 
-| project Timestamp, DeviceName, AccountName, LogonType, ActionType, RemoteIP, RemoteDeviceName 
-| order by Timestamp asc 
- 
-Query 3 – MSTSC Lateral Movement    
-DeviceProcessEvents 
-| where Timestamp >= datetime(2025-11-19)   
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "mstsc.exe" 
-| project Timestamp, DeviceName, FileName, ProcessCommandLine 
-| sort by Timestamp asc 
- 
-Query 4 – Failed then Successful Attempts 
-DeviceLogonEvents 
-| where Timestamp >= datetime(2025-11-19)  
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where RemoteIP == "10.1.0.108" 
-| project Timestamp, DeviceName, AccountName, ActionType, RemoteIP 
-| sort by Timestamp asc 
+Query 1 – Starting Point
+DeviceLogonEvents
+| where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where DeviceName contains "azuki"
 
-Query 5 – Share Enumeration   
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin" 
-| where Timestamp >= datetime(2025-11-19)  
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "net" 
-| distinct ProcessCommandLine 
+Query 2 – RemoteInteractive Login
+DeviceLogonEvents
+| where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where AccountName contains "kenji.sato"
+| where LogonType == "RemoteInteractive" | project Timestamp, DeviceName, AccountName, LogonType, ActionType, RemoteIP, RemoteDeviceName | order by Timestamp asc
 
-Query 6 – UNC Path Enumeration 
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin"  
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "\" 
-| distinct ProcessCommandLine 
+Query 3 – MSTSC Lateral Movement
+DeviceProcessEvents | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "mstsc.exe" | project Timestamp, DeviceName, FileName, ProcessCommandLine | sort by Timestamp asc
 
-Query 7 – Privilege Enumeration 
-DeviceProcessEvents  
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin" 
-| where Timestamp >= datetime(2025-11-19)  
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "whoami" 
-| distinct ProcessCommandLine 
+Query 4 – Failed then Successful Attempts DeviceLogonEvents | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where RemoteIP == "10.1.0.108" | project Timestamp, DeviceName, AccountName, ActionType, RemoteIP | sort by Timestamp asc
 
-Query 8 – IPConfig Enumeration 
-DeviceProcessEvents  
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "ipconfig" 
-| distinct ProcessCommandLine 
+Query 5 – Share Enumeration
+DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin" | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "net" | distinct ProcessCommandLine
 
-Query 9 – Attrib Hidden Directory 
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin"  
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "attrib"  
-| distinct ProcessCommandLine 
- 
-Query 10 – Certutil Download 
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where AccountName == "fileadmin" 
-| where Timestamp >= datetime(2025-11-19)   
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine contains "certutil" 
-| distinct ProcessCommandLine 
+Query 6 – UNC Path Enumeration DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin"
+| where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "" | distinct ProcessCommandLine
 
-Query 11 – CSV File Creation 
-DeviceFileEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d  
-| where FileName has_any (".csv") 
-| project Timestamp, DeviceName, FileName, FolderPath, ActionType  
-| sort by Timestamp desc 
+Query 7 – Privilege Enumeration DeviceProcessEvents
+| where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin" | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "whoami" | distinct ProcessCommandLine
 
-Query 12 – Recursive Copy 
-DeviceFileEvents  
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d  
-| where InitiatingProcessCommandLine has_any ("robo", "xcopy", "copy")  
-| project Timestamp, InitiatingProcessCommandLine, DeviceName, FileName, FolderPath, ActionType 
-| sort by Timestamp 
-| distinct InitiatingProcessCommandLine 
+Query 8 – IPConfig Enumeration DeviceProcessEvents
+| where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "ipconfig" | distinct ProcessCommandLine
 
-Query 13 – Compression 
-DeviceProcessEvents  
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where FileName has_any ("7z.exe", "7za.exe", "zip", "tar.exe", "rar.exe", "winrar.exe", "gzip.exe") 
-| distinct ProcessCommandLine 
+Query 9 – Attrib Hidden Directory DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin"
+| where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "attrib"
+| distinct ProcessCommandLine
 
-Query 14 – Renamed Credential Tools 
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19)  
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine has_any ("lsass", "lsass.exe", "comsvcs.dll", "MiniDump", "sekurlsa") 
-| distinct ProcessCommandLine 
+Query 10 – Certutil Download DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where AccountName == "fileadmin" | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine contains "certutil" | distinct ProcessCommandLine
 
-Query 15 – HTTP/HTTPS Exfiltration 
-DeviceProcessEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where ProcessCommandLine has_any ("http", "https") 
-| distinct ProcessCommandLine 
- 
-Query 16 – Registry Persistence 
-DeviceRegistryEvents 
-| where DeviceName == "azuki-fileserver01" 
-| where Timestamp >= datetime(2025-11-19) 
-| where Timestamp < datetime(2025-11-19) + 7d 
-| where RegistryKey has_any ( 
-"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",  
-"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce", 
-"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run", 
-"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce"  
-) 
-| where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryValueModified") 
-| project Timestamp, RegistryValueName, RegistryValueData, ActionType 
+Query 11 – CSV File Creation DeviceFileEvents | where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d
+| where FileName has_any (".csv") | project Timestamp, DeviceName, FileName, FolderPath, ActionType
+| sort by Timestamp desc
 
+Query 12 – Recursive Copy DeviceFileEvents
+| where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d
+| where InitiatingProcessCommandLine has_any ("robo", "xcopy", "copy")
+| project Timestamp, InitiatingProcessCommandLine, DeviceName, FileName, FolderPath, ActionType | sort by Timestamp | distinct InitiatingProcessCommandLine
 
+Query 13 – Compression DeviceProcessEvents
+| where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where FileName has_any ("7z.exe", "7za.exe", "zip", "tar.exe", "rar.exe", "winrar.exe", "gzip.exe") | distinct ProcessCommandLine
+
+Query 14 – Renamed Credential Tools DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19)
+| where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine has_any ("lsass", "lsass.exe", "comsvcs.dll", "MiniDump", "sekurlsa") | distinct ProcessCommandLine
+
+Query 15 – HTTP/HTTPS Exfiltration DeviceProcessEvents | where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where ProcessCommandLine has_any ("http", "https") | distinct ProcessCommandLine
+
+Query 16 – Registry Persistence DeviceRegistryEvents | where DeviceName == "azuki-fileserver01" | where Timestamp >= datetime(2025-11-19) | where Timestamp < datetime(2025-11-19) + 7d | where RegistryKey has_any ( "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run",
+"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce", "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run", "HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce"
+) | where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryValueModified") | project Timestamp, RegistryValueName, RegistryValueData, ActionType
