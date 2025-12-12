@@ -4,11 +4,11 @@ Incident Response report from Threat Hunt
 
 📝 INCIDENT RESPONSE REPORT 
  
-Date of Report: 2025-12-10 
-Severity Level: HIGH 
-Report Status: Open 
-Escalated To: Incident Response Team 
-Incident ID: AZUKI-2025-TH-DEC10 
+Date of Report: 2025-12-10  
+Severity Level: HIGH  
+Report Status: Open  
+Escalated To: Incident Response Team  
+Incident ID: AZUKI-2025-TH-DEC10  
 Analyst: Brian Sanford 
 
 📌 SUMMARY OF FINDINGS
