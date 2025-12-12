@@ -3,6 +3,7 @@ Incident Response report from Threat Hunt
 <img width="438" height="690" alt="image" src="https://github.com/user-attachments/assets/f6cd53e5-ec26-4fa7-bb3a-2bcc53912b61" />
 
 📝 INCIDENT RESPONSE REPORT
+
 Date of Report: 2025-12-10
 Severity Level: HIGH
 Report Status: Open
@@ -11,6 +12,7 @@ Incident ID: AZUKI-2025-TH-DEC10
 Analyst: Brian Sanford
 
 📌 SUMMARY OF FINDINGS
+
 Attacker returned approximately 72 hours after initial access on 11/19.
 Successful RemoteInteractive login using compromised account kenji.sato.
 Lateral movement via mstsc.exe to azuki-fileserver01.
@@ -20,6 +22,7 @@ Use of persistence mechanisms, log deletion, and anti-forensics techniques.
 🔍 WHO, WHAT, WHEN, WHERE, WHY, HOW
 
 👤 WHO
+
 Attacker Source IPs
 Initial Access IP: 159.26.106.98
 Later Movement: 10.1.0.108
@@ -29,6 +32,7 @@ Accounts: fileadmin
 Systems: azuki-fileserver01
 
 📂 WHAT (Event Summary)
+
 Initial access via RemoteInteractive logon from 159.26.106.98 using compromised credentials.
 Attacker returned 72 hours later from 10.1.0.108 to azuki-fileserver01.
 Lateral movement using:
@@ -76,6 +80,7 @@ Access privileged credentials
 Exfiltrate sensitive administrative data
 
 ⚙️ HOW (Full Attack Chain)
+
 Remote login using compromised credentials (kenji.sato).
 Attacker returns from internal IP 10.1.0.108.
 Lateral movement via mstsc.exe.
@@ -137,6 +142,7 @@ fileadmin
 kenji.sato
 
 👁️ APPENDIX B — MITRE ATT&CK MAPPING
+
 Tactic	Technique	ID
 Initial Access	Remote Services	T1133
 Execution	PowerShell	T1059.001
@@ -148,6 +154,7 @@ Lateral Movement	RDP	T1021.001
 Exfiltration	Exfiltration Over Web Service	T1567
 
 🗓 APPENDIX C — INVESTIGATION TIMELINE
+
 11/19 – Initial access from 159.26.106.98
 11/22 – RemoteInteractive login (compromised account)
 11/22 – Lateral movement
@@ -158,135 +165,135 @@ Exfiltration	Exfiltration Over Web Service	T1567
 📚 APPENDIX D — KQL QUERIES
 
 Query 1 – Starting Point
-DeviceLogonEvents
+'''DeviceLogonEvents
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
-| where DeviceName contains "azuki"
+| where DeviceName contains "azuki"'''
 
 Query 2 – RemoteInteractive Login
-DeviceLogonEvents
+'''DeviceLogonEvents
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where AccountName contains "kenji.sato"
 | where LogonType == "RemoteInteractive"
 | project Timestamp, DeviceName, AccountName, LogonType, ActionType, RemoteIP, RemoteDeviceName
-| order by Timestamp asc
+| order by Timestamp asc'''
 
 Query 3 – MSTSC Lateral Movement
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "mstsc.exe"
 | project Timestamp, DeviceName, FileName, ProcessCommandLine
-| sort by Timestamp asc
+| sort by Timestamp asc'''
 
 Query 4 – Failed then Successful Attempts
-DeviceLogonEvents
+'''DeviceLogonEvents
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where RemoteIP == "10.1.0.108"
 | project Timestamp, DeviceName, AccountName, ActionType, RemoteIP
-| sort by Timestamp asc
+| sort by Timestamp asc'''
 
 Query 5 – Share Enumeration
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "net"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 6 – UNC Path Enumeration
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "\\"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 7 – Privilege Enumeration
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "whoami"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 8 – IPConfig Enumeration
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "ipconfig"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 9 – Attrib Hidden Directory
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "attrib"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 10 – Certutil Download
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine contains "certutil"
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 11 – CSV File Creation
-DeviceFileEvents
+'''DeviceFileEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where FileName has_any (".csv")
 | project Timestamp, DeviceName, FileName, FolderPath, ActionType
-| sort by Timestamp desc
+| sort by Timestamp desc'''
 
 Query 12 – Recursive Copy
-DeviceFileEvents
+'''DeviceFileEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where InitiatingProcessCommandLine has_any ("robo", "xcopy", "copy")
 | project Timestamp, InitiatingProcessCommandLine, DeviceName, FileName, FolderPath, ActionType
 | sort by Timestamp
-| distinct InitiatingProcessCommandLine
+| distinct InitiatingProcessCommandLine'''
 
 Query 13 – Compression
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where FileName has_any ("7z.exe", "7za.exe", "zip", "tar.exe", "rar.exe", "winrar.exe", "gzip.exe")
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 14 – Renamed Credential Tools
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine has_any ("lsass", "lsass.exe", "comsvcs.dll", "MiniDump", "sekurlsa")
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 15 – HTTP/HTTPS Exfiltration
-DeviceProcessEvents
+'''DeviceProcessEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
 | where ProcessCommandLine has_any ("http", "https")
-| distinct ProcessCommandLine
+| distinct ProcessCommandLine'''
 
 Query 16 – Registry Persistence
-DeviceRegistryEvents
+'''DeviceRegistryEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
@@ -297,10 +304,10 @@ DeviceRegistryEvents
     "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
 )
 | where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryValueModified")
-| project Timestamp, RegistryValueName, RegistryValueData, ActionType
+| project Timestamp, RegistryValueName, RegistryValueData, ActionType'''
 
 Query 17 – Deleted PowerShell History
-DeviceFileEvents
+'''DeviceFileEvents
 | where DeviceName == "azuki-fileserver01"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
@@ -308,4 +315,4 @@ DeviceFileEvents
 | where FileName == "ConsoleHost_history.txt"
     or FolderPath has "\\Microsoft\\Windows\\PowerShell\\PSReadLine"
 | project Timestamp, DeviceName, FolderPath, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine
-| order by Timestamp desc
+| order by Timestamp desc'''
