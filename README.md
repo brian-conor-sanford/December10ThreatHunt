@@ -219,7 +219,7 @@ DeviceProcessEvents
 | where AccountName == "fileadmin"
 | where Timestamp >= datetime(2025-11-19)
 | where Timestamp < datetime(2025-11-19) + 7d
-| where ProcessCommandLine contains "\"
+| where ProcessCommandLine contains "\\"
 | distinct ProcessCommandLine
 Query 7 – Privilege Enumeration
 DeviceProcessEvents
@@ -304,8 +304,3 @@ DeviceRegistryEvents
 )
 | where ActionType in ("RegistryValueSet", "RegistryKeyCreated", "RegistryValueModified")
 | project Timestamp, RegistryValueName, RegistryValueData, ActionType
-Query 17 – Deleted PowerShell History
-DeviceFileEvents
-| where DeviceName == "azuki-fileserver01"
-| where Timestamp >= datetime(2025-11-19)
-| where Timestamp < datetime(2025-11-19) + 7d
