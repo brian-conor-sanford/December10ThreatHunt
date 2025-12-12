@@ -2,14 +2,14 @@
 Incident Response report from Threat Hunt
 <img width="438" height="690" alt="image" src="https://github.com/user-attachments/assets/f6cd53e5-ec26-4fa7-bb3a-2bcc53912b61" />
 
-📝 INCIDENT RESPONSE REPORT
-
-Date of Report: 2025-12-10
-Severity Level: HIGH
-Report Status: Open
-Escalated To: Incident Response Team
-Incident ID: AZUKI-2025-TH-DEC10
-Analyst: Brian Sanford
+📝 INCIDENT RESPONSE REPORT 
+ 
+Date of Report: 2025-12-10 
+Severity Level: HIGH 
+Report Status: Open 
+Escalated To: Incident Response Team 
+Incident ID: AZUKI-2025-TH-DEC10 
+Analyst: Brian Sanford 
 
 📌 SUMMARY OF FINDINGS
 
