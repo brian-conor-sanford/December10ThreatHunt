@@ -8,7 +8,7 @@ Date of Report: 2025-12-10
 Severity Level: HIGH  
 Report Status: Open  
 Escalated To: Incident Response Team  
-Incident ID: AZUKI-2025-TH-DEC10  
+Incident ID: AZUKI-2025-DEC-CARGO-HOLD
 Analyst: Brian Sanford 
 
 📌 SUMMARY OF FINDINGS
